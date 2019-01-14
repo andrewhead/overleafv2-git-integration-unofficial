@@ -6,4 +6,4 @@ if [ -z "$1" ]
     PREFIX=$1
 fi
 
-rm -f $PREFIX/sharelatex-git
+rm -f $PREFIX/overleafv2-git

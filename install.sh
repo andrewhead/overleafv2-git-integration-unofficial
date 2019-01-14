@@ -6,6 +6,6 @@ if [ -z "$1" ]
     PREFIX=$1
 fi
 
-cp sharelatex-git $PREFIX
-chmod +x $PREFIX/sharelatex-git
+cp overleafv2-git $PREFIX
+chmod +x $PREFIX/overleafv2-git
 

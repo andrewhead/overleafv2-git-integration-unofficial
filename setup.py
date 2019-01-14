@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name='sharelatex_git',
-    version='0.3',
-    scripts=['sharelatex-git'],
+    name='overleafv2_git',
+    version='1.0',
+    scripts=['overleafv2-git'],
     install_requires=[
         'requests',
         'bs4',
