@@ -3,25 +3,25 @@
 ##
 ## Copyright (C) 2015-2017 João Ricardo Lourenço <jorl17.8@gmail.com>
 ## Copyright (C) 2017 Abel Gómez (https://github.com/abelgomez)
+## Copyright (C) 2019 Tobias Bora (https://github.com/tobiasBora)
 ##
-## Github: https://github.com/Jorl17
+## Project main repository: https://github.com/tobiasBora/overleafv2-git-integration-unofficial
+## This repository is an improvement of the repository https://github.com/Jorl17/sharelatex-git-integration-unofficial
 ##
-## Project main repository: https://github.com/Jorl17/sharelatex-git-integration-unofficial
+## This file is part of overleafv2-git-integration-unofficial.
 ##
-## This file is part of sharelatex-git-integration-unofficial.
-##
-## sharelatex-git-integration-unofficial is free software: you can redistribute it and/or modify
+## overleafv2-git-integration-unofficial is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
 ## the Free Software Foundation, either version 2 of the License, or
 ## (at your option) any later version.
 ##
-## sharelatex-git-integration-unofficial is distributed in the hope that it will be useful,
+## overleafv2-git-integration-unofficial is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with sharelatex-git-integration-unofficial.  If not, see <http://www.gnu.org/licenses/>.
+## along with overleafv2-git-integration-unofficial.  If not, see <http://www.gnu.org/licenses/>.
 ##
 from optparse import OptionParser
 try:
@@ -129,7 +129,7 @@ def get_git_ignore():
     return os.path.join(git_base, '.gitignore')
 
 #------------------------------------------------------------------------------
-# Make sure that sharelatex-git's files are not added to project management,
+# Make sure that overleafv2-git's files are not added to project management,
 # and that they're always present in the .gitignore.
 #------------------------------------------------------------------------------
 def ensure_gitignore_is_fine():
@@ -146,9 +146,9 @@ def ensure_gitignore_is_fine():
                 if s not in lines:
                     f.write(s + '\n')
 
-            write_if_not_there('sharelatex-git.py')
-            write_if_not_there('sharelatex-git')
-            write_if_not_there('.sharelatex-git')
+            write_if_not_there('overleafv2-git.py')
+            write_if_not_there('overleafv2-git')
+            write_if_not_there('.overleafv2-git')
     except:
         Logger().log("Can't edit .gitignore file [{}].".format(git_ignore), True, 'YELLOW')
 
@@ -176,15 +176,15 @@ def commit_add_file(filename):
 #------------------------------------------------------------------------------
 # We also commit any possible changes to the gitignore file. The commit message
 # is optional and it is always preceeded by a timestamp and the
-# sharelatex-git-integration identifier The project title, if not null, is
+# overleafv2-git-integration identifier The project title, if not null, is
 # also always appended to the message.
 #------------------------------------------------------------------------------
 def commit_all_changes(message, title):
     run_cmd('git add -A {}'.format(get_git_ignore()))
     if title:
-        cmd = 'git commit -m"[sharelatex-git-integration {} {}]'.format(title, get_timestamp())
+        cmd = 'git commit -m"[overleafv2-git-integration {} {}]'.format(title, get_timestamp())
     else:
-        cmd = 'git commit -m"[sharelatex-git-integration {}]'.format(get_timestamp())
+        cmd = 'git commit -m"[overleafv2-git-integration {}]'.format(get_timestamp())
     if message:
         run_cmd('{} {}"'.format(cmd,message))
     else:
@@ -199,13 +199,13 @@ def files_changed():
     return 'nothing to commit, working directory clean' not in out.lower()
 
 #------------------------------------------------------------------------------
-# Download the sharelatex project and extract it. Die out if there's any
+# Download the overleafv2 project and extract it. Die out if there's any
 # problem (e.g. bad ID, bad network connection or private project).
 #
 # Return the project title (null if it can't be determined).
 #------------------------------------------------------------------------------
 def fetch_updates(url, email, password):
-    file_name = 'sharelatex.zip'
+    file_name = 'overleaf.zip'
 
     base_url = extract_base_url(url)
     login_url = "{}/login".format(base_url)
@@ -254,41 +254,25 @@ def fetch_updates(url, email, password):
         return None
     
 #------------------------------------------------------------------------------
-# Handles old-style .sharelatex-git files, which only contain single ids of 
-# projects stored in www.sharelatex.com
-#------------------------------------------------------------------------------
-def read_old_style_saved_config_value(key):
-    doc = '.sharelatex-git'
-    if key == 'url':
-        try:
-            Logger().log("Reading project id from an old-style .sharelatex-git file", True, 'YELLOW')
-            with open(doc, 'r') as f:
-                return 'https://www.sharelatex.com/project/{}'.format(f.readline().strip())
-        except:
-            pass
-    return None
-#------------------------------------------------------------------------------
-# Fetch the config value of the sharelatex document/project from a previous
-# invocation. Config values are stored in a .sharelatex-git file.
+# Fetch the config value of the overleafv2 document/project from a previous
+# invocation. Config values are stored in a .overleafv2-git file.
 #------------------------------------------------------------------------------
 def read_saved_config_value(key):
-    doc = '.sharelatex-git'
+    doc = '.overleafv2-git'
 
     try:
         config = configparser.ConfigParser()
         config.read(doc)
-        return config['sharelatex'][key]
+        return config['overleafv2'][key]
     except:
-        if os.path.isfile(doc):
-            return read_old_style_saved_config_value(key)
         return None
 
 #------------------------------------------------------------------------------
-# Write the key value of the sharelatex document/project so that future
-# invocations do not require it. This is stored in a .sharelatex-git file.
+# Write the key value of the overleafv2 document/project so that future
+# invocations do not require it. This is stored in a .overleafv2-git file.
 #------------------------------------------------------------------------------
 def write_saved_config_value(key, value):
-    doc = '.sharelatex-git'
+    doc = '.overleafv2-git'
 
     if value is None:
         return
@@ -297,23 +281,23 @@ def write_saved_config_value(key, value):
     try:
         config.read(doc)
     except:
-        Logger().log("Invalid format found in .sharelatex-git config file, recreating...", True, 'YELLOW')
-        Logger().log("Contents of old-style .sharelatex-git files will be preserverd.", True, 'YELLOW')
+        Logger().log("Invalid format found in .overleafv2-git config file, recreating...", True, 'YELLOW')
+        Logger().log("Contents of old-style .overleafv2-git files will be preserverd.", True, 'YELLOW')
 
         os.remove(doc)
     try:
-        if not config.has_section('sharelatex'):
-            config['sharelatex'] = {}
-        config['sharelatex'][key] = value
+        if not config.has_section('overleafv2'):
+            config['overleafv2'] = {}
+        config['overleafv2'][key] = value
         with open(doc, 'w') as configfile:
             config.write(configfile)
     except:
-       Logger().log("Problem creating .sharelatex-git file", True, 'YELLOW')
+       Logger().log("Problem creating .overleafv2-git file", True, 'YELLOW')
 
 #------------------------------------------------------------------------------
 # Given a key value passed by the user (potentially None/empty), as well as
-# the .sharelatex-git file from previous invocations, determine the key value
-# of the sharelatex project. In case of conflict, ask the user, but default to
+# the .overleafv2-git file from previous invocations, determine the key value
+# of the overleafv2 project. In case of conflict, ask the user, but default to
 # the one that he/she supplied.
 #------------------------------------------------------------------------------
 def determine_config_value(key, value):
@@ -392,7 +376,7 @@ def normalize_input(i):
     else:
         p = re.compile("[a-zA-Z0-9]*")
         if p.match(i):
-            return 'https://www.sharelatex.com/project/{}'.format(i)
+            return 'https://www.overleaf.com/project/{}'.format(i)
         else:
             Logger().log('Unrecognized id supplied ({})'.format(i))
 
@@ -411,7 +395,7 @@ def extract_base_url(url):
 #------------------------------------------------------------------------------
 def parse_input():
     parser = OptionParser("usage: %prog [options] [url|id].\n"
-    "e.g.\n\t%prog -m 'Wrote Thesis introduction' https://www.sharelatex.com/project/56147712cc7f5d0adeadbeef\n"
+    "e.g.\n\t%prog -m 'Wrote Thesis introduction' https://www.overleaf.com/project/56147712cc7f5d0adeadbeef\n"
     "\t%prog -m 'Wrote Thesis introduction' 56147712cc7f5d0adeadbeef\n"
     "\t%prog -m 'Wrote Thesis introduction'                                                            [id from last invocation is used]\n"
     "\t%prog                                                                                           [id from last invocation is used, nothing is added to commit message]")
