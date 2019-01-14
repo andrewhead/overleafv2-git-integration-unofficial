@@ -1,6 +1,6 @@
 # overleafv2-git-integration-unofficial
 
-**overleafv2-git-integration-unofficial** is a Python 3 script that can act as a **free replacement** to [Overleafv2](http://www.overleaf.com)'s github integration.
+**overleafv2-git-integration-unofficial** is a Python 3 script that can act as a **free replacement** to [Overleafv2](http://www.overleaf.com)'s github integration. Note that this script is an improvement of [Sharelatex-git](https://github.com/Jorl17/sharelatex-git-integration-unofficial) that aims to bring a two way git-bridge between overleaf v2 and git. It should soon be possible to also send data from your local git to the online overleaf project !
 
 With **overleafv2-git-integration-unofficial**, you can use any folder in a **git repository** to keep your Overleafv2 project and track its changes. The script automatically **downloads the most recent files** and **does git commits for you**. You can also specify an optional commit message. It will even create your git repository if you haven't yet!
 
